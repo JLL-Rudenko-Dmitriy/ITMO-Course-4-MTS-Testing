@@ -32,12 +32,21 @@
 gradlew.bat clean test
 ```
 Отчет до исправлений
-![img.png](img.png)
+![img.png](images/img.png)
 
 Для каждого выделенного bug-report реализовал фикс в классе PasswordPolicy.  
 После повторного запуска `gradlew.bat clean test` все тесты зелёные
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
 Покрытие тестами:
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
---- 
+![img_2.png](images/img_2.png)
+![img_3.png](images/img_3.png)
+
+---
+### commit 71422da5d02cec6fbbe503f311eb854b41afa75b (HEAD -> lab-1) 
+Для выполнения пунктов Полнота и Читаемость добавил тесты и аннтотации
+![img_4.png](images/img_4.png)
+![img_5.png](images/img_5.png)
+
+---
+### Добавляю Allure
+![img_6.png](images/img_6.png)

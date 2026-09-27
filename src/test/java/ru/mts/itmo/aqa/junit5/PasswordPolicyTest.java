@@ -1,6 +1,6 @@
 package ru.mts.itmo.aqa.junit5;
 
-import io.qameta.allure.Allure;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("PasswordPolicy chek")
 @DisplayName("[Password] policies")
 public class PasswordPolicyTest {
     private final PasswordPolicy passwordPolicy = new PasswordPolicy();
@@ -19,6 +20,8 @@ public class PasswordPolicyTest {
     @DisplayName("[Password]: Null password throw IllegalArgumentException")
     class NullPasswordThrowIllegalArgumentExceptionTest {
         @Test
+        @Story("Null password throw IllegalArgumentException")
+        @Severity(SeverityLevel.NORMAL)
         @DisplayName("[Password] Null password should throw IllegalArgumentException")
         void passEqualsNullShouldThrowIllegalArgumentException() {
             // Arrange
@@ -30,6 +33,8 @@ public class PasswordPolicyTest {
         }
 
         @Test
+        @Story("Password is not null should no throw IllegalArgumentException")
+        @Severity(SeverityLevel.BLOCKER)
         @DisplayName("[Password] Not null password should not throw IllegalArgumentException")
         void passNotEqualsNullShouldNotThrowException() {
             // Arrange
@@ -42,10 +47,13 @@ public class PasswordPolicyTest {
     }
 
     @Nested
+    @Feature("Password length")
     @DisplayName("[Password]: Length policies")
     class PasswordLengthPoliciesTests {
 
         @DisplayName("[Password] TOO_SHORT if password < 8")
+        @Story("TOO_SHORT")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="Password {0} length >= 8 is {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#tooShortBoundaryCases")
         void tooShortBoundaryTest(String password, boolean expectedIsValid) {
@@ -67,6 +75,8 @@ public class PasswordPolicyTest {
 
 
         @DisplayName("[Password] TOO_LONG if password > 64")
+        @Story("TOO_LONG")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="Password {0} length <= 64 is {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#tooLongBoundaryCases")
         void tooLongBoundaryTest(String password, boolean expectedIsValid) {
@@ -76,7 +86,6 @@ public class PasswordPolicyTest {
 
             // Act
             var result = passwordPolicy.check(password);
-
 
             // Assert
             assertCheckResultEqualsExpected(
@@ -89,10 +98,13 @@ public class PasswordPolicyTest {
 
 
     @Nested
+    @Feature("Password syntax")
     @DisplayName("[Password] Syntax policies and rules")
     class SyntaxPoliciesAndRules {
 
         @DisplayName("[Password] Should contains at least one digit else return NO_DIGIT")
+        @Story("NO_DIGIT")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="Password = {0} has at least one digit: {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#digitCaseSource")
         void checkDigitsTest(String password, boolean shouldBeValid) {
@@ -112,6 +124,8 @@ public class PasswordPolicyTest {
         }
 
         @DisplayName("[Password] Should contains at least one upper case symbol else return NO_UPPER")
+        @Story("NO_UPPER")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="Password = {0} has at least one uppercase symbol: {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#upperCaseLatinLettersSource")
         void checkUpperCaseLatinLettersTest(String password, boolean shouldBeValid) {
@@ -131,6 +145,8 @@ public class PasswordPolicyTest {
         }
 
         @DisplayName("[Password] Should not have whitespace symbols else return HAS_WHITESPACE")
+        @Story("HAS_WHITESPACE")
+        @Severity(SeverityLevel.NORMAL)
         @ParameterizedTest(name="Password = {0} does not has whitespaces or tabs: {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#whiteSpaceEquivalentClassesSource")
         void checkAllPasswordsWithWhiteSpacesShouldNotBeValid(String password, boolean shouldBeValid
@@ -151,6 +167,8 @@ public class PasswordPolicyTest {
         }
 
         @DisplayName("[Password] Should contains at least one special symbols from {!,@,#,$,%,^,&,*,(,),-,_,=,+} else return NO_SPECIAL")
+        @Story("NO_SPECIAL")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="Password = {0} contains allowed speical symbol: {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#specialSymbolsCaseSource")
         void checkSpecialSymbolsTest(String password, boolean shouldBeValid) {
@@ -170,6 +188,8 @@ public class PasswordPolicyTest {
         }
 
         @DisplayName("[Password] should contains at least one lower case symbol else returns NO_LOWER")
+        @Story("NO_LOWER")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="Password = {0} has at least one lowercase symbol {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#lowerCaseLatinLettersSource")
         void checkLowerCaseLatinLettersTest(String password, boolean shouldBeValid) {
@@ -189,6 +209,8 @@ public class PasswordPolicyTest {
         }
 
         @DisplayName("[Password] should not contains repeated characters")
+        @Story("REPEATED_RUN")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name = "Password = {0} hasn\'t repeated characters = {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#repeatedRunSource")
         void checkRepeatedRunTest(String password, boolean shouldBeValid) {
@@ -209,8 +231,11 @@ public class PasswordPolicyTest {
     }
 
     @Nested
+    @Feature("Login validation")
     @DisplayName("[Password] Contains login policies")
     class ContainsLoginPolicyTests {
+        @Story("CONTAINS_LOGIN")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name= "password = {0} contains loging = {1} should be valid = {2}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#containsLoginSource")
         void checkPasswordContainsLoginTest(String password, String login, boolean shouldBeValid) {
@@ -232,8 +257,11 @@ public class PasswordPolicyTest {
     }
 
     @Nested
-    @DisplayName("[Password] password in balack list policy")
+    @Feature("Blacklist validation")
+    @DisplayName("[Password] password in blacklist policy")
     class TooEasyPasswordPolicyTests {
+        @Story("BLACKLISTED")
+        @Severity(SeverityLevel.CRITICAL)
         @ParameterizedTest(name="password = {0} is in black list should be valid {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#rainbowTableSource")
         void checkPasswordMatchWithPasswordFromRainbowTableTest(String password, boolean shouldBeValid) {
@@ -256,6 +284,9 @@ public class PasswordPolicyTest {
     @Nested
     @DisplayName("[Password] Pairwise tests")
     class PairwiseTests {
+
+        @Story("Pairwise testing")
+        @Severity(SeverityLevel.NORMAL)
         @ParameterizedTest(name="password={0} with errors: {2} is valid {1}")
         @MethodSource("ru.mts.itmo.aqa.junit5.PasswordPolicyMethodSources#pairwiseMethodSource")
         void checkWithPairwiseTestCasesShouldResultShouldBeExpectedValue(
@@ -279,14 +310,25 @@ public class PasswordPolicyTest {
             );
         }
     }
+
+    @Step("Check validity and list of violations")
     private static void assertCheckResultEqualsExpected(
             boolean expected,
             List<PasswordPolicy.Violation> expectedViolations,
             PasswordPolicy.Result actualResult) {
 
+        attachResult(actualResult);
+
         assertEquals(expected, actualResult.isValid());
         if (!expected) {
             assertTrue(actualResult.violations().containsAll(expectedViolations));
         }
+    }
+
+    @Attachment(value = "Actual result", type = "text/plain")
+    private static String attachResult(PasswordPolicy.Result actualResult) {
+        return "isValid=" + actualResult.isValid()
+                + System.lineSeparator()
+                + "violations=" + actualResult.violations();
     }
 }
