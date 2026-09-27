@@ -2,6 +2,7 @@ package ru.mts.itmo.aqa.junit5;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Set;
  * а не только первое. Порядок нарушений в списке не определён и на него нельзя опираться.
  * <ul>
  *   <li>{@code null} на входе пароля — {@link IllegalArgumentException};</li>
- *   <li>{@link Violation#TOO_SHORT} — длина меньше {@value #MIN_LENGTH};</li>
+ *   <li>{@link Violation#TOO_SHORT} — длина меньше {@value #'MIN_LENGTH'};</li>
  *   <li>{@link Violation#TOO_LONG} — длина больше {@value #MAX_LENGTH} (сама
  *       {@value #MAX_LENGTH} — ещё допустима);</li>
  *   <li>{@link Violation#NO_DIGIT} — нет ни одной цифры;</li>
@@ -100,7 +101,7 @@ public class PasswordPolicy {
         if (password.length() < MIN_LENGTH) {
             found.add(Violation.TOO_SHORT);
         }
-        if (password.length() > MAX_LENGTH - 1) {
+        if (password.length() > MAX_LENGTH) {
             found.add(Violation.TOO_LONG);
         }
 
@@ -146,7 +147,7 @@ public class PasswordPolicy {
             found.add(Violation.CONTAINS_LOGIN);
         }
 
-        if (BLACKLIST.contains(password)) {
+        if (BLACKLIST.contains(password.toLowerCase(Locale.ROOT))) {
             found.add(Violation.BLACKLISTED);
         }
 
@@ -159,7 +160,7 @@ public class PasswordPolicy {
         for (int i = 1; i < s.length(); i++) {
             if (s.charAt(i) == s.charAt(i - 1)) {
                 run++;
-                if (run > 3) {
+                if (run >= 3) {
                     return true;
                 }
             } else {
