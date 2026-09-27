@@ -24,6 +24,20 @@ public class PasswordPolicyMethodSources {
         );
     }
 
+    static Stream<Arguments> digitCaseSource() {
+        return Stream.of(
+                Arguments.of("Abcdefg@", false),
+                Arguments.of("Abcdef1@", true)
+        );
+    }
+
+    static Stream<Arguments> upperCaseLatinLettersSource() {
+        return Stream.of(
+                Arguments.of("abcdef1@", false),
+                Arguments.of("Abcdef1@", true)
+        );
+    }
+
     static Stream<Arguments> whiteSpaceEquivalentClassesSource() {
         return Stream.of(
                 Arguments.of("Itmo_Test Passw0rd", false),
@@ -37,6 +51,13 @@ public class PasswordPolicyMethodSources {
                 Arguments.of("1Aab22baA1", false),
                 Arguments.of("1Aab{]baA1", false),
                 Arguments.of("1Aab@#baA1", true)
+        );
+    }
+
+    static Stream<Arguments> lowerCaseLatinLettersSource() {
+        return Stream.of(
+                Arguments.of("ABC1@DEF", false),
+                Arguments.of("ABC1@DEf", true)
         );
     }
 
@@ -147,7 +168,8 @@ public class PasswordPolicyMethodSources {
                 Arguments.of("QWERTY", false),
                 Arguments.of("123456", false),
                 Arguments.of("ADMIN", false),
-                Arguments.of("WELCOME", false)
+                Arguments.of("WELCOME", false),
+                Arguments.of("Password1@", true)
         );
     }
 }

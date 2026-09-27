@@ -33,3 +33,11 @@ gradlew.bat clean test
 ```
 Отчет до исправлений
 ![img.png](img.png)
+
+Для каждого выделенного bug-report реализовал фикс в классе PasswordPolicy.  
+После повторного запуска `gradlew.bat clean test` все тесты зелёные
+![img_1.png](img_1.png)
+Покрытие тестами:
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
+--- 
